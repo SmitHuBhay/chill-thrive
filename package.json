@@ -4,9 +4,7 @@
   "description": "Premium Wellness Brand Platform",
   "main": "app.js",
   "scripts": {
-    "scripts": {
-  "start": "node app.js" 
-}
+    "start": "node app.js",
     "seed": "node seed.js",
     "dev": "nodemon app.js"
   },
