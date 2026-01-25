@@ -1,0 +1,162 @@
+<style>
+    /* Parallax & Animations */
+    .parallax-bg {
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    @keyframes fade-in-up {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-entry {
+        opacity: 0;
+        animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 1s ease-out;
+    }
+
+    .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Custom Timeline Line */
+    .timeline-line::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 2px;
+        height: 100%;
+        background: #e2e8f0;
+        transform: translateX(-50%);
+        z-index: 0;
+    }
+</style>
+
+<div id="preloader"
+    class="fixed inset-0 z-[9999] bg-slate-900 flex flex-col items-center justify-center transition-opacity duration-700 ease-out">
+    <div class="relative w-24 h-24 mb-6">
+        <div class="absolute inset-0 border-t-4 border-cyan-500 rounded-full animate-spin"></div>
+        <div class="absolute inset-3 border-b-4 border-white/20 rounded-full animate-spin"
+            style="animation-direction: reverse; animation-duration: 2s;"></div>
+    </div>
+    <h2 class="text-white text-xl font-bold tracking-widest uppercase animate-pulse">Our Story</h2>
+</div>
+
+<div class="relative h-[85vh] parallax-bg flex items-center justify-center text-center px-4"
+    style="background-image: url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
+
+    <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-[2px]"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto">
+        <div class="animate-entry" style="animation-delay: 0.2s;">
+            <span
+                class="inline-block py-1 px-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-cyan-100 text-xs font-bold tracking-[0.3em] uppercase mb-6 shadow-xl">
+                The Origin
+            </span>
+        </div>
+        <h1 class="animate-entry text-6xl md:text-8xl text-white font-black mb-8 drop-shadow-2xl leading-tight"
+            style="animation-delay: 0.4s;">
+            It started with a<br><span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Single Breath.</span>
+        </h1>
+    </div>
+
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-white/50">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+    </div>
+</div>
+
+<section class="py-24 bg-white relative">
+    <div class="max-w-3xl mx-auto px-6">
+        <div class="relative -mt-40 mb-12 text-center reveal">
+            <div class="inline-block relative">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full blur opacity-50 transform translate-y-4">
+                </div>
+                <img src="https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?auto=format&fit=crop&q=80&w=400"
+                    class="relative w-40 h-40 md:w-56 md:h-56 rounded-full object-cover border-8 border-white shadow-2xl">
+            </div>
+            <div class="mt-6">
+                <h2 class="text-3xl font-bold text-slate-900">Alex Mercer</h2>
+                <p class="text-cyan-600 font-bold uppercase tracking-widest text-sm">Founder & Head Coach</p>
+            </div>
+        </div>
+
+        <div class="prose prose-lg prose-slate mx-auto leading-relaxed text-slate-600 reveal">
+            <p
+                class="first-letter:text-7xl first-letter:font-black first-letter:text-slate-900 first-letter:mr-3 first-letter:float-left">
+                <%= locals.site ? site.founderStory
+                    : 'Chill Thrive was born not from ambition, but from necessity. Five years ago, I was burned out, disconnected, and running on adrenaline. My nervous system was fried. I tried meditation, I tried medication, but nothing could quiet the noise.'
+                    %>
+            </p>
+            <p>
+                Then I found the cold. That first plunge was terrifying. Every instinct screamed at me to get out. But
+                in that chaos, I found a silence I hadn't heard in years.
+            </p>
+            <p>
+                I realized that recovery isn't passive. You don't "wait" to feel better. You have to actively train your
+                body to find calm in the storm. That is what we build here. Not just ice baths, but resilience for life.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-slate-50 border-t border-slate-100">
+    <div class="max-w-4xl mx-auto px-6 reveal">
+        <blockquote class="text-center relative">
+            <svg class="text-cyan-200 w-24 h-24 absolute -top-10 left-1/2 -translate-x-1/2 opacity-50"
+                fill="currentColor" viewBox="0 0 24 24">
+                <path
+                    d="M14.017 21L14.017 18C14.017 16.0547 15.3789 13.5938 17.4062 13.5938H17.5938C18.1562 13.5938 18.5156 12.9375 18.1406 12.5312C16.9219 11.2031 16.3594 10.3281 16.3594 8.71875C16.3594 6.95312 17.6172 5.54688 19.1875 5.54688C20.7344 5.54688 22.0156 6.8125 22.0156 8.76562C22.0156 12.2812 19.9688 16.2969 17.5 19.9219C17.1406 20.4531 16.4844 20.625 15.9688 20.2969C15.4688 20 15.2656 19.3438 15.6094 18.8281C15.6094 18.8281 15.6094 18.8125 15.625 18.8125C15.7188 18.6719 15.7656 18.5 15.7656 18.3281C15.7656 18.1562 15.7188 17.9844 15.625 17.8438L14.017 21ZM5.99219 21L5.99219 18C5.99219 16.0547 7.35391 13.5938 9.38125 13.5938H9.56875C10.1312 13.5938 10.4906 12.9375 10.1156 12.5312C8.89688 11.2031 8.33438 10.3281 8.33438 8.71875C8.33438 6.95312 9.59219 5.54688 11.1625 5.54688C12.7094 5.54688 13.9906 6.8125 13.9906 8.76562C13.9906 12.2812 11.9437 16.2969 9.475 19.9219C9.11562 20.4531 8.45938 20.625 7.94375 20.2969C7.44375 20 7.24063 19.3438 7.58438 18.8281C7.58438 18.8281 7.58438 18.8125 7.6 18.8125C7.69375 18.6719 7.74063 18.5 7.74063 18.3281C7.74063 18.1562 7.69375 17.9844 7.6 17.8438L5.99219 21Z" />
+            </svg>
+
+            <p
+                class="text-3xl md:text-5xl font-serif font-medium text-slate-800 italic leading-tight mb-8 relative z-10">
+                "<%= locals.site ? site.founderQuote
+                    : 'Recovery is not about escaping life. It is about training your body to handle it.' %>"
+            </p>
+
+            <div class="flex items-center justify-center gap-4">
+                <div class="h-px w-12 bg-slate-300"></div>
+                <a href="/" class="flex items-center group">
+                    <img src="uploads\img.png" alt="Chill & Thrive"
+                        class="h-12 w-auto object-contain fill transition-transform duration-300 group-hover:scale-105">
+                </a>
+                <div class="h-px w-12 bg-slate-300"></div>
+            </div>
+        </blockquote>
+    </div>
+</section>
+
+<script>
+    // Loader Logic
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        setTimeout(() => { preloader.style.opacity = '0'; setTimeout(() => preloader.style.display = 'none', 700); }, 600);
+    });
+
+    // Reveal Animation
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>

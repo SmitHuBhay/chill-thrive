@@ -1,0 +1,131 @@
+<style>
+    /* 1. HERO ANIMATIONS */
+    @keyframes gradient-xy {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    .animate-gradient { background-size: 200% 200%; animation: gradient-xy 15s ease infinite; }
+    
+    /* 2. IMAGE PANNING */
+    @keyframes pan-image {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+    .animate-pan { animation: pan-image 20s ease-in-out infinite; }
+
+    /* 3. FLOATING ELEMENTS */
+    @keyframes float {
+        0% { transform: translate(0px, 0px); }
+        50% { transform: translate(0px, -20px); }
+        100% { transform: translate(0px, 0px); }
+    }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+
+    /* 4. SCROLL REVEAL */
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+</style>
+
+<div id="preloader" class="fixed inset-0 z-[9999] bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-700 ease-out">
+    <div class="relative w-24 h-24 mb-6">
+        <div class="absolute inset-0 border-t-4 border-cyan-500 rounded-full animate-spin"></div>
+        <div class="absolute inset-3 border-b-4 border-white/20 rounded-full animate-spin" style="animation-direction: reverse; animation-duration: 2s;"></div>
+    </div>
+</div>
+
+<div class="relative h-[50vh] flex items-center justify-center overflow-hidden bg-slate-900">
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-cyan-950 to-slate-900 animate-gradient opacity-90 z-10"></div>
+    
+    <div class="absolute inset-0 z-0 overflow-hidden">
+        <div class="w-full h-full bg-[url('https://images.unsplash.com/photo-1516541196182-6bdb0516ed27?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center opacity-30 mix-blend-overlay animate-pan"></div>
+    </div>
+    
+    <div class="relative z-20 text-center px-4 max-w-4xl mx-auto pt-10">
+        <span class="inline-block py-1 px-3 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold tracking-[0.3em] uppercase mb-6 reveal">
+            Knowledge Base
+        </span>
+        <h1 class="text-4xl md:text-6xl font-black text-white mb-6 reveal" style="transition-delay: 100ms;">
+            The Science of <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Recovery</span>
+        </h1>
+        <p class="text-lg text-slate-300 max-w-2xl mx-auto font-light leading-relaxed reveal" style="transition-delay: 200ms;">
+            Exploring the physiology of cold exposure, resilience, and human performance.
+        </p>
+    </div>
+</div>
+
+<section class="py-24 bg-slate-50 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]"></div>
+    <div class="absolute top-20 right-0 w-96 h-96 bg-cyan-200/20 rounded-full blur-[120px] pointer-events-none animate-float"></div>
+
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+
+        <% if(posts.length === 0) { %>
+            <div class="col-span-3 text-center py-20 bg-white/50 backdrop-blur-sm rounded-3xl border border-dashed border-slate-300 reveal">
+                <div class="text-6xl mb-4">📚</div>
+                <h3 class="text-2xl font-bold text-slate-900">No articles published yet.</h3>
+                <p class="text-slate-500 mt-2">Check back soon for new insights.</p>
+            </div>
+        <% } %>
+
+        <div class="grid gap-10 lg:grid-cols-3 md:grid-cols-2">
+            <% posts.forEach((post, index) => { %>
+                <div class="group flex flex-col bg-white rounded-[2rem] shadow-lg hover:shadow-2xl hover:shadow-cyan-900/10 overflow-hidden border border-slate-100 transition-all duration-500 hover:-translate-y-2 reveal" style="transition-delay: <%= index * 100 %>ms;">
+                    
+                    <div class="h-56 overflow-hidden relative">
+                        <img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                             src="<%= post.imageURL || 'https://images.unsplash.com/photo-1544367563-12123d8965cd?auto=format&fit=crop&w=800&q=80' %>" 
+                             alt="<%= post.title %>">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-slate-700 shadow-sm">
+                            <%= post.createdAt.toLocaleDateString() %>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <% post.tags.forEach(tag => { %>
+                                    <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-cyan-700 bg-cyan-50 border border-cyan-100 rounded-full group-hover:bg-cyan-600 group-hover:text-white transition-colors duration-300">
+                                        <%= tag %>
+                                    </span>
+                                <% }) %>
+                            </div>
+
+                            <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-cyan-700 transition-colors font-serif leading-tight">
+                                <%= post.title %>
+                            </h3>
+
+                            <p class="text-sm text-slate-500 line-clamp-3 leading-relaxed">
+                                <%= post.body %>
+                            </p>
+                        </div>
+
+                        <div class="mt-6 pt-6 border-t border-slate-100 flex items-center text-cyan-600 font-bold text-sm group-hover:text-cyan-500 transition-colors">
+                            <span>Read Article</span>
+                            <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+<script>
+    // 1. LOADER
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        if(preloader) {
+            setTimeout(() => { preloader.style.opacity = '0'; setTimeout(() => preloader.style.display = 'none', 700); }, 500);
+        }
+    });
+
+    // 2. SCROLL REVEAL
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>

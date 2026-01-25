@@ -1,0 +1,316 @@
+<style>
+    /* 1. HERO ANIMATIONS */
+    @keyframes gradient-xy {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    .animate-gradient { background-size: 200% 200%; animation: gradient-xy 15s ease infinite; }
+    
+    /* 2. BACKGROUND FLOATING BLOBS */
+    @keyframes float-slow {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        33% { transform: translate(30px, -50px) rotate(10deg); }
+        66% { transform: translate(-20px, 20px) rotate(-5deg); }
+        100% { transform: translate(0, 0) rotate(0deg); }
+    }
+    .animate-blob { animation: float-slow 20s infinite ease-in-out; }
+
+    /* 3. BUTTON SHINE EFFECT */
+    @keyframes shine {
+        100% { left: 125%; }
+    }
+    .btn-shine { position: relative; overflow: hidden; }
+    .btn-shine::after {
+        content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: 0.5s;
+    }
+    .btn-shine:hover::after { animation: shine 1s; }
+
+    /* 4. SCROLL REVEAL */
+    .reveal { opacity: 0; transform: translateY(50px); transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* 5. GLASS INPUTS */
+    .glass-input { 
+        background: rgba(255, 255, 255, 0.03); 
+        border: 1px solid rgba(255, 255, 255, 0.1); 
+        backdrop-filter: blur(10px); 
+        color: white; 
+        transition: all 0.4s ease;
+    }
+    .glass-input:focus { 
+        background: rgba(255, 255, 255, 0.1); 
+        border-color: #22d3ee; 
+        box-shadow: 0 0 20px rgba(34, 211, 238, 0.1);
+        outline: none; 
+        transform: translateY(-2px);
+    }
+</style>
+
+<div id="preloader" class="fixed inset-0 z-[9999] bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-1000 ease-out">
+    <div class="relative w-24 h-24 mb-6">
+        <div class="absolute inset-0 border-t-4 border-cyan-500 rounded-full animate-spin"></div>
+        <div class="absolute inset-3 border-b-4 border-white/20 rounded-full animate-spin" style="animation-direction: reverse; animation-duration: 2s;"></div>
+    </div>
+    <h2 class="text-white text-2xl font-black tracking-[0.5em] uppercase animate-pulse">Chill Thrive</h2>
+</div>
+
+<div class="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-900">
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-cyan-950 to-slate-900 animate-gradient opacity-90"></div>
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519823551278-64ac92734fb1?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-overlay"></div>
+    
+    <div class="relative z-10 text-center px-4 max-w-5xl mx-auto mt-16">
+        <span class="inline-block py-1 px-3 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold tracking-[0.3em] uppercase mb-8 reveal" style="transition-delay: 100ms;">
+            Ahmedabad's Premier Studio
+        </span>
+        <h1 class="text-5xl md:text-8xl font-black text-white mb-6 leading-tight reveal" style="transition-delay: 200ms;">
+            Master Your <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 animate-pulse">Physiology.</span>
+        </h1>
+        <p class="text-lg md:text-2xl text-slate-300 mb-10 max-w-2xl mx-auto font-light reveal" style="transition-delay: 300ms;">
+            Contrast therapy protocols to reset your nervous system, reduce inflammation, and unlock peak performance.
+        </p>
+        <div class="flex flex-col md:flex-row gap-4 justify-center reveal" style="transition-delay: 400ms;">
+            <a href="/book" class="btn-shine bg-cyan-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-cyan-400 transition transform hover:-translate-y-1 shadow-[0_0_30px_rgba(6,182,212,0.5)] hover:shadow-[0_0_50px_rgba(6,182,212,0.8)]">
+                Book First Session
+            </a>
+            <a href="/services" class="px-8 py-4 rounded-full font-bold text-lg text-white border border-white/20 hover:bg-white/10 transition backdrop-blur-md hover:scale-105 duration-300">
+                View Protocols
+            </a>
+        </div>
+    </div>
+</div>
+
+<section class="py-24 bg-slate-50 relative overflow-hidden">
+    <div class="absolute top-20 left-0 w-96 h-96 bg-cyan-200/30 rounded-full blur-[100px] animate-blob"></div>
+    <div class="absolute bottom-20 right-0 w-96 h-96 bg-blue-200/30 rounded-full blur-[100px] animate-blob" style="animation-delay: 2s;"></div>
+
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+        <div class="flex justify-between items-end mb-12 reveal">
+            <div>
+                <h2 class="text-4xl font-bold text-slate-900 mb-2">Signature Protocols</h2>
+                <p class="text-slate-500">Scientifically designed for maximum recovery.</p>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <% if (typeof services !== 'undefined' && services.length > 0) { %>
+                <% services.forEach((service, index) => { %>
+                    <div class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-cyan-500/20 hover:-translate-y-3 hover:scale-[1.02] transition-all duration-500 reveal cursor-pointer relative" style="transition-delay: <%= index * 100 %>ms;">
+                        
+                        <div class="h-72 overflow-hidden relative">
+                            <img src="<%= service.imageURL %>" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000 ease-out">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity"></div>
+                            
+                            <span class="absolute top-4 right-4 bg-white/20 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full border border-white/10 group-hover:bg-cyan-500 group-hover:border-cyan-400 transition-colors">
+                                <%= service.duration %>
+                            </span>
+
+                            <div class="absolute bottom-0 left-0 p-6 translate-y-2 group-hover:translate-y-0 transition duration-500">
+                                <h3 class="text-white font-bold text-2xl mb-1"><%= service.title %></h3>
+                                <p class="text-cyan-300 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">View Details &rarr;</p>
+                            </div>
+                        </div>
+
+                        <div class="p-6 relative z-10 bg-white">
+                            <p class="text-slate-500 text-sm mb-6 line-clamp-2 leading-relaxed"><%= service.description %></p>
+                            <div class="flex justify-between items-center border-t border-slate-100 pt-4">
+                                <span class="text-2xl font-black text-slate-900">₹<%= service.price %></span>
+                                <a href="/book?service=<%= service._id %>" class="bg-slate-900 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-cyan-600 transition shadow-lg hover:shadow-cyan-500/30 transform active:scale-95">
+                                    Book Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="col-span-3 text-center py-10 text-slate-400">No services loaded.</div>
+            <% } %>
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-white relative border-t border-slate-100 overflow-hidden">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-slate-100/50 rounded-full blur-[100px] animate-pulse"></div>
+
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+        <div class="text-center mb-16 reveal">
+            <span class="text-cyan-600 font-bold tracking-widest uppercase text-xs mb-2 block">The Journal</span>
+            <h2 class="text-4xl md:text-5xl font-black text-slate-900">Insights & Science</h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <% 
+                let displayBlogs = (typeof blogs !== 'undefined' && blogs.length > 0) ? blogs : [
+                    { 
+                        title: "The Science of Cold Shock Proteins", 
+                        // FIXED: New Image that works
+                        imageURL: "https://images.unsplash.com/photo-1516541196182-6bdb0516ed27?q=80&w=800&auto=format&fit=crop", 
+                        link: "https://pubmed.ncbi.nlm.nih.gov/25294318/", 
+                        external: true 
+                    },
+                    { 
+                        title: "Breathwork for Anxiety: A Guide", 
+                        imageURL: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=800&auto=format&fit=crop", 
+                        link: "https://www.healthline.com/health/breathing-exercises-for-anxiety", 
+                        external: true 
+                    },
+                    { 
+                        title: "Why Heat Stress Builds Resilience", 
+                        imageURL: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=800&auto=format&fit=crop", 
+                        link: "https://hubermanlab.com/the-science-and-health-benefits-of-deliberate-heat-exposure/", 
+                        external: true 
+                    }
+                ];
+            %>
+
+            <% displayBlogs.forEach((blog, index) => { %>
+                <a href="<%= blog.link || '/awareness' %>" 
+                   target="<%= blog.external ? '_blank' : '_self' %>"
+                   class="group relative block rounded-2xl overflow-hidden aspect-[4/5] reveal shadow-xl cursor-pointer hover:-translate-y-2 transition-transform duration-500" 
+                   style="transition-delay: <%= index * 100 %>ms;">
+                    
+                    <img src="<%= blog.imageURL %>" 
+                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+                    
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-500"></div>
+                    
+                    <div class="absolute bottom-0 left-0 p-8 w-full">
+                        <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-2 block translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition duration-500">
+                            <%= blog.external ? 'Read External Source' : 'Read Article' %> ↗
+                        </span>
+                        <h3 class="text-2xl font-bold text-white leading-tight group-hover:-translate-y-1 transition-transform duration-500"><%= blog.title %></h3>
+                    </div>
+                </a>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-slate-900 text-white relative">
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+        <h2 class="text-3xl md:text-4xl font-black text-center mb-16 reveal">
+            Community Voices
+        </h2>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+            <% const testimonials = (typeof reviews !== 'undefined') ? reviews : []; %>
+            <% if (testimonials.length > 0) { %>
+                <% testimonials.forEach((review, index) => { %>
+                    <div class="bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-2xl reveal hover:bg-white/10 hover:border-cyan-500/30 transition-all duration-300 flex flex-col h-full" style="transition-delay: <%= index * 100 %>ms;">
+                        <div class="flex text-cyan-400 mb-4 animate-pulse">
+                            <% for(let i=0; i<review.rating; i++) { %>★<% } %>
+                        </div>
+                        
+                        <div class="flex-grow">
+                            <p class="text-slate-300 italic mb-4">"<%= review.feedback || review.message %>"</p>
+                        </div>
+
+                        <% if(review.reply) { %>
+                            <div class="mt-4 mb-6 p-4 bg-slate-800/80 rounded-lg border-l-2 border-cyan-500 reveal active" style="transition-delay: 200ms;">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-cyan-400 text-xs font-bold uppercase tracking-widest">Admin Response</span>
+                                </div>
+                                <p class="text-slate-400 text-xs leading-relaxed"><%= review.reply %></p>
+                            </div>
+                        <% } %>
+
+                        <div class="flex items-center gap-3 pt-4 border-t border-white/5">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-500 flex items-center justify-center font-bold text-sm shadow-lg shadow-cyan-500/20">
+                                <%= review.name.charAt(0) %>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm"><%= review.name %></h4>
+                                <span class="text-xs text-slate-500">Verified Client</span>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                 <p class="text-center text-slate-500 w-full col-span-3">Be the first to leave a review!</p>
+            <% } %>
+        </div>
+    </div>
+</section>
+
+<section class="relative py-24 px-4 bg-slate-950 overflow-hidden">
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] animate-blob pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] animate-blob pointer-events-none" style="animation-delay: 4s;"></div>
+
+    <div class="max-w-3xl mx-auto relative z-10 text-center reveal">
+        <span class="text-cyan-500 font-bold tracking-widest text-xs uppercase mb-2 block">We Value You</span>
+        <h2 class="text-4xl font-bold text-white mb-8">How was your session?</h2>
+        
+        <div class="bg-white/5 backdrop-blur-xl border border-white/10 p-8 md:p-10 rounded-3xl text-left shadow-2xl transition-all duration-500 hover:shadow-cyan-500/10">
+            <form action="/feedback" method="POST" class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-xs font-bold text-slate-400 uppercase ml-1">Name</label>
+                        <input type="text" name="name" placeholder="John Doe" class="w-full glass-input p-3 rounded-xl mt-2" required>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-400 uppercase ml-1">Email</label>
+                        <input type="email" name="email" placeholder="john@example.com" class="w-full glass-input p-3 rounded-xl mt-2" required>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-400 uppercase ml-1">Experience</label>
+                    <div class="flex gap-4 mt-2 bg-slate-900/50 p-1 rounded-xl w-fit border border-white/10">
+                        <select name="rating" class="bg-transparent text-white p-2 outline-none w-full cursor-pointer hover:text-cyan-400 transition">
+                            <option value="5" class="text-black">★★★★★ (5/5)</option>
+                            <option value="4" class="text-black">★★★★ (4/5)</option>
+                            <option value="3" class="text-black">★★★ (3/5)</option>
+                            <option value="2" class="text-black">★★ (2/5)</option>
+                            <option value="1" class="text-black">★ (1/5)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-400 uppercase ml-1">Review</label>
+                    <textarea name="feedback" rows="3" placeholder="How do you feel?" class="w-full glass-input p-3 rounded-xl mt-2 resize-none" required></textarea>
+                </div>
+
+                <button type="submit" class="btn-shine w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-[0_0_20px_rgba(8,145,178,0.4)]">
+                    Submit Review
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        setTimeout(() => { 
+            preloader.style.opacity = '0'; 
+            setTimeout(() => preloader.style.display = 'none', 1000); 
+        }, 800);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { 
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active'); 
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('msg') === 'success') {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'fixed top-5 right-5 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl z-[10000] animate-bounce';
+        alertDiv.innerHTML = '✨ Review Submitted Successfully!';
+        document.body.appendChild(alertDiv);
+        
+        setTimeout(() => {
+            alertDiv.style.opacity = '0';
+            setTimeout(() => alertDiv.remove(), 500);
+        }, 4000);
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+</script>

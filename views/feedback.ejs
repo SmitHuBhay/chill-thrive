@@ -1,0 +1,168 @@
+<style>
+    /* 1. ANIMATIONS */
+    @keyframes gradient-xy {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    .animate-gradient { background-size: 200% 200%; animation: gradient-xy 15s ease infinite; }
+    
+    @keyframes float {
+        0% { transform: translate(0px, 0px); }
+        50% { transform: translate(0px, -20px); }
+        100% { transform: translate(0px, 0px); }
+    }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+
+    /* 2. REVEAL EFFECT */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* 3. GLASS INPUTS */
+    .glass-input { 
+        background: rgba(255, 255, 255, 0.03); 
+        border: 1px solid rgba(255, 255, 255, 0.1); 
+        backdrop-filter: blur(10px); 
+        color: white; 
+        transition: all 0.3s ease;
+    }
+    .glass-input:focus { 
+        background: rgba(255, 255, 255, 0.1); 
+        border-color: #22d3ee; 
+        box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
+        outline: none; 
+    }
+    /* Fix for dark select dropdowns */
+    select option { background-color: #0f172a; color: white; }
+
+    /* 4. BUTTON SHINE */
+    @keyframes shine { 100% { left: 125%; } }
+    .btn-shine { position: relative; overflow: hidden; }
+    .btn-shine::after {
+        content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: 0.5s;
+    }
+    .btn-shine:hover::after { animation: shine 1s; }
+</style>
+
+<div id="alert-box" class="fixed top-24 right-5 z-[100] transform translate-x-full transition-transform duration-500">
+    <div id="alert-content" class="bg-slate-900/90 backdrop-blur-xl border border-white/10 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 border-l-4 border-cyan-500">
+        <span class="text-2xl animate-bounce">🔔</span>
+        <div>
+            <h4 id="alert-title" class="font-bold text-sm uppercase tracking-wider text-white">Notification</h4>
+            <p id="alert-message" class="text-sm text-slate-400">Message content here.</p>
+        </div>
+    </div>
+</div>
+
+<div class="relative min-h-screen bg-slate-900 flex items-center justify-center py-20 px-4 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-cyan-950 to-slate-900 animate-gradient opacity-90"></div>
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+    
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none animate-float"></div>
+    <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none animate-float" style="animation-delay: 2s;"></div>
+
+    <div class="relative z-10 w-full max-w-4xl">
+        
+        <div class="text-center mb-12 reveal">
+            <span class="inline-block py-1 px-3 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold tracking-[0.3em] uppercase mb-6">
+                Community Voices
+            </span>
+            <h1 class="text-4xl md:text-6xl font-black text-white mb-6">Share Your Story</h1>
+            <p class="text-lg text-slate-300 font-light max-w-2xl mx-auto leading-relaxed">
+                Your feedback helps us refine our protocols and inspires others to start their recovery journey.
+            </p>
+        </div>
+
+        <div class="bg-white/5 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-3xl shadow-2xl reveal" style="transition-delay: 100ms;">
+            <form action="/feedback" method="POST" class="space-y-8">
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="group">
+                        <label class="block text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2 ml-1">Full Name</label>
+                        <input type="text" name="name" placeholder="John Doe" class="w-full glass-input p-4 rounded-xl" required>
+                    </div>
+
+                    <div class="group">
+                        <label class="block text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2 ml-1">Booking Email</label>
+                        <input type="email" name="email" placeholder="email@example.com" class="w-full glass-input p-4 rounded-xl" required>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <label class="block text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2 ml-1">How was your experience?</label>
+                    <div class="relative">
+                        <select name="rating" class="w-full glass-input p-4 rounded-xl appearance-none cursor-pointer">
+                            <option value="5">★★★★★ - Excellent, highly recommend!</option>
+                            <option value="4">★★★★ - Great experience</option>
+                            <option value="3">★★★ - Good, but could be better</option>
+                            <option value="2">★★ - Below average</option>
+                            <option value="1">★ - Poor experience</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-cyan-400">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <label class="block text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2 ml-1">Your Detailed Review</label>
+                    <textarea name="feedback" rows="5" placeholder="Tell us about your session. How did you feel afterwards?" class="w-full glass-input p-4 rounded-xl resize-none" required></textarea>
+                </div>
+
+                <button type="submit" class="btn-shine w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-5 rounded-xl transition-all transform hover:-translate-y-1 shadow-[0_0_30px_rgba(8,145,178,0.4)] text-lg tracking-wide">
+                    Submit Feedback
+                </button>
+
+                <p class="text-center text-xs text-slate-500 mt-6 border-t border-white/5 pt-6">
+                    *Reviews are verified against booking records to ensure authenticity.
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. SCROLL REVEAL
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // 2. ALERT LOGIC (Your original logic preserved)
+    const urlParams = new URLSearchParams(window.location.search);
+    const msg = urlParams.get('msg');
+    const alertBox = document.getElementById('alert-box');
+    const alertContent = document.getElementById('alert-content');
+    const alertTitle = document.getElementById('alert-title');
+    const alertMessage = document.getElementById('alert-message');
+
+    if (msg) {
+        // Show the alert
+        alertBox.classList.remove('translate-x-full');
+        
+        if (msg === 'success') {
+            alertContent.classList.add('border-green-500');
+            alertTitle.innerText = "Success";
+            alertTitle.classList.add('text-green-400');
+            alertMessage.innerText = "Review submitted! Pending Admin approval.";
+        } else if (msg === 'unauthorized') {
+            alertContent.classList.add('border-red-500');
+            alertTitle.innerText = "Access Denied";
+            alertTitle.classList.add('text-red-400');
+            alertMessage.innerText = "No booking found with this email.";
+        } else {
+            alertContent.classList.add('border-red-500');
+            alertTitle.innerText = "Error";
+            alertTitle.classList.add('text-red-400');
+            alertMessage.innerText = "Something went wrong. Please try again.";
+        }
+
+        // Hide after 5 seconds
+        setTimeout(() => {
+            alertBox.classList.add('translate-x-full');
+            // Clean URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }, 5000);
+    }
+</script>

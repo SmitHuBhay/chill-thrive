@@ -1,0 +1,218 @@
+<style>
+    /* 1. ANIMATIONS */
+    @keyframes gradient-xy {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    .animate-gradient { background-size: 200% 200%; animation: gradient-xy 15s ease infinite; }
+    
+    @keyframes float {
+        0% { transform: translate(0px, 0px); }
+        50% { transform: translate(0px, -20px); }
+        100% { transform: translate(0px, 0px); }
+    }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+
+    /* 2. REVEAL EFFECT */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* 3. GLASS INPUTS */
+    .glass-input { 
+        background: rgba(255, 255, 255, 0.05); 
+        border: 1px solid rgba(255, 255, 255, 0.1); 
+        backdrop-filter: blur(10px); 
+        color: white; 
+        transition: all 0.3s ease;
+    }
+    .glass-input:focus { 
+        background: rgba(255, 255, 255, 0.1); 
+        border-color: #22d3ee; 
+        box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
+        outline: none; 
+    }
+    /* Fix for dark select dropdowns */
+    select option { background-color: #0f172a; color: white; }
+    /* Calendar Icon color fix */
+    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+
+    /* 4. BUTTON SHINE */
+    @keyframes shine { 100% { left: 125%; } }
+    .btn-shine { position: relative; overflow: hidden; }
+    .btn-shine::after {
+        content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: 0.5s;
+    }
+    .btn-shine:hover::after { animation: shine 1s; }
+</style>
+
+<div class="relative min-h-screen bg-slate-900 flex items-center justify-center py-20 px-4 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-cyan-950 to-slate-900 animate-gradient opacity-90"></div>
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600334019640-eb89d892d3f6?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+    
+    <div class="absolute top-0 left-0 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none animate-float"></div>
+    <div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none animate-float" style="animation-delay: 2s;"></div>
+
+    <div class="relative z-10 w-full max-w-lg bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden reveal">
+        
+        <div class="bg-gradient-to-r from-cyan-900/80 to-slate-900/80 p-8 text-center relative border-b border-white/5">
+            <a href="/" class="absolute top-6 left-6 text-cyan-400 hover:text-white transition flex items-center gap-2 text-xs font-bold uppercase tracking-widest group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Back
+            </a>
+            <h1 class="text-3xl font-black text-white mb-2 tracking-tight">Book Your Session</h1>
+            <p class="text-cyan-200/70 text-sm">Select your therapy and preferred time.</p>
+        </div>
+
+        <form action="/book" method="POST" class="p-8 space-y-8">
+            
+            <div class="group">
+                <label class="block text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2 ml-1">Select Service</label>
+                <div class="relative">
+                    <select name="service" class="w-full glass-input p-4 rounded-xl appearance-none cursor-pointer" required>
+                        <option value="" disabled selected>Choose a therapy...</option>
+                        <% services.forEach(service => { %>
+                            <option value="<%= service._id %>" <%= selectedService == service._id ? 'selected' : '' %>>
+                                <%= service.title %> - ₹<%= service.price %> (<%= service.duration %>)
+                            </option>
+                        <% }) %>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-cyan-400">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div class="group">
+                    <label class="block text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2 ml-1">Date</label>
+                    <input type="date" name="date" id="dateInput" class="w-full glass-input p-4 rounded-xl" required>
+                </div>
+
+                <div class="group">
+                    <label class="block text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2 ml-1">Time Slot</label>
+                    <div class="relative">
+                        <select name="timeSlot" id="timeSlotSelect" class="w-full glass-input p-4 rounded-xl appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" required disabled>
+                            <option value="" disabled selected>Select Date...</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-cyan-400">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group">
+                <label class="block text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2 ml-1">Phone Number</label>
+                <input type="tel" name="phone" placeholder="+91 98765 43210" class="w-full glass-input p-4 rounded-xl" required>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                <label class="block text-xs font-bold text-cyan-400 uppercase tracking-widest mb-4">Payment Method</label>
+                
+                <div class="space-y-3">
+                    <label class="flex items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-xl cursor-pointer hover:bg-white/10 hover:border-cyan-500/50 transition group">
+                        <input type="radio" name="paymentMethod" value="Cash" class="w-5 h-5 text-cyan-500 focus:ring-cyan-500 bg-transparent border-white/30" checked onchange="toggleQR(false)">
+                        <div>
+                            <span class="block font-bold text-white text-sm group-hover:text-cyan-300 transition">Pay at Venue</span>
+                            <span class="block text-xs text-slate-400">Cash or Card upon arrival.</span>
+                        </div>
+                    </label>
+
+                    <label class="flex items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-xl cursor-pointer hover:bg-white/10 hover:border-cyan-500/50 transition group">
+                        <input type="radio" name="paymentMethod" value="UPI" class="w-5 h-5 text-cyan-500 focus:ring-cyan-500 bg-transparent border-white/30" onchange="toggleQR(true)">
+                        <div>
+                            <span class="block font-bold text-white text-sm group-hover:text-cyan-300 transition">Pay via UPI</span>
+                            <span class="block text-xs text-slate-400">Scan QR Code instantly.</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div id="qrCodeSection" class="hidden mt-6 text-center bg-white p-6 rounded-xl border border-white/20 shadow-inner">
+                    <p class="text-xs font-bold text-slate-800 uppercase mb-3 tracking-widest">Scan to Pay</p>
+                    <div class="bg-white p-2 inline-block rounded-lg shadow-lg">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=your-upi-id@okicici&pn=ChillAndThrive" class="w-32 h-32">
+                    </div>
+                    <p class="text-[10px] text-slate-500 mt-3 font-medium uppercase tracking-wide">Click Confirm after payment</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 bg-cyan-500/10 p-4 rounded-xl border border-cyan-500/20">
+                <div class="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-300 font-bold">
+                    <%= user.name.charAt(0) %>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-widest">Booking for</p>
+                    <p class="text-white text-sm font-medium"><%= user.name %></p>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-shine w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-5 rounded-xl transition-all transform hover:-translate-y-1 shadow-lg shadow-cyan-900/20 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                Confirm Booking
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // 1. SCROLL REVEAL
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // 2. QR LOGIC
+    function toggleQR(show) {
+        const qrSection = document.getElementById('qrCodeSection');
+        if (show) qrSection.classList.remove('hidden');
+        else qrSection.classList.add('hidden');
+    }
+
+    // 3. AVAILABILITY LOGIC
+    const dateInput = document.getElementById('dateInput');
+    const timeSelect = document.getElementById('timeSlotSelect');
+    const submitBtn = document.querySelector('button[type="submit"]');
+
+    // Set Min Date to Today
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1;
+    let dd = today.getDate();
+    if (mm < 10) mm = '0' + mm;
+    if (dd < 10) dd = '0' + dd;
+    dateInput.min = yyyy + '-' + mm + '-' + dd;
+
+    dateInput.addEventListener('change', async function() {
+        const selectedDate = this.value;
+        if (!selectedDate) return;
+        
+        timeSelect.innerHTML = '<option>Checking availability...</option>';
+        timeSelect.disabled = true;
+        submitBtn.disabled = true;
+
+        try {
+            const response = await fetch(`/api/availability?date=${selectedDate}`);
+            const data = await response.json();
+            
+            timeSelect.innerHTML = '<option value="" disabled selected>Select a Time...</option>';
+
+            if (data.blocked) {
+                timeSelect.innerHTML = '<option disabled>-- Date Unavailable --</option>';
+            } else if (data.slots.length === 0) {
+                timeSelect.innerHTML = '<option disabled>-- Fully Booked --</option>';
+            } else {
+                data.slots.forEach(slot => {
+                    const option = document.createElement('option');
+                    option.value = slot.time;
+                    option.text = `${slot.time} (${slot.remaining} spots left)`;
+                    timeSelect.add(option);
+                });
+                timeSelect.disabled = false;
+                submitBtn.disabled = false;
+            }
+        } catch (error) {
+            console.error(error);
+            timeSelect.innerHTML = '<option>Error loading schedule.</option>';
+        }
+    });
+</script>
