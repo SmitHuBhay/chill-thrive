@@ -4,7 +4,7 @@ const adminController = require('../controllers/adminController');
 const multer = require('multer');
 const path = require('path');
 
-// --- MULTER CONFIGURATION (For Image Uploads) ---
+//multer setup for file uploads
 const storage = multer.diskStorage({
     destination: './public/uploads/', // Files will be saved here
     filename: function(req, file, cb){
@@ -13,13 +13,13 @@ const storage = multer.diskStorage({
     }
 });
 
-// Check file type (Optional but good)
+// Check file type 
 const upload = multer({ 
     storage: storage,
     limits: { fileSize: 5000000 }, // 5MB limit
 });
 
-// --- AUTH MIDDLEWARE ---
+//authentication middleware for admin routes
 const auth = (req, res, next) => {
     if (req.session.admin) {
         return next();
@@ -27,7 +27,6 @@ const auth = (req, res, next) => {
     res.redirect('/admin/login');
 };
 
-// --- ROUTES ---
 
 // Login & Logout
 router.get('/login', adminController.getLogin);
@@ -45,8 +44,7 @@ router.get('/service/delete/:id', auth, adminController.deleteService);
 // Bookings
 router.post('/booking/update/:id', auth, adminController.updateBookingStatus);
 
-// Blog Management (UPDATED WITH UPLOAD MIDDLEWARE)
-// We add 'upload.single("image")' here to handle the file
+// Blog Management
 router.post('/blog/add', auth, upload.single('image'), adminController.createContent);
 
 router.get('/content/edit/:id', auth, adminController.getEditContent);
@@ -57,12 +55,12 @@ router.get('/content/delete/:id', auth, adminController.deleteContent);
 router.post('/feedback/approve/:id', auth, adminController.approveTestimonial);
 router.post('/service', auth, adminController.createService);
 router.post('/service/update/:id', auth, adminController.updateService);
-// NEW: Delete Service Route
+//delete service
 router.get('/service/delete/:id', auth, adminController.deleteService);
 
-// FEEDBACK
+//feedback approve
 router.post('/feedback/approve/:id', auth, adminController.approveTestimonial);
-// NEW: Reply Route
+//reply to feedback
 router.post('/feedback/reply/:id', auth, adminController.replyToFeedback);
 router.post('/schedule/update', auth, adminController.updateSchedule);
 module.exports = router;

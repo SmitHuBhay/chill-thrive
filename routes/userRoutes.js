@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const Booking = require('../models/Booking'); // <--- IMPORTANT: Needed to find bookings
+const Booking = require('../models/Booking'); 
 const passport = require('passport');
-
-// ==========================================
-// 1. AUTH ROUTES (Login/Register)
-// ==========================================
 
 // Show Login Page
 router.get('/login', (req, res) => {
@@ -45,29 +41,21 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// ==========================================
-// 2. GOOGLE AUTH ROUTES
-// ==========================================
-
 // Trigger Google Login
 router.get('/auth/google', passport.authenticate('google', {
     scope: ['profile', 'email']
 }));
 
-// Google Callback (Where Google sends the user back)
+// Google Callback 
 router.get('/auth/google/callback', 
     passport.authenticate('google', { failureRedirect: '/user/login' }),
     (req, res) => {
         // Successful authentication
-        // Copy passport user to our session variable for compatibility
         req.session.user = req.user;
         res.redirect('/');
     }
 );
 
-// ==========================================
-// 3. DASHBOARD ROUTE (The missing piece!)
-// ==========================================
 router.get('/dashboard', async (req, res) => {
     // Check if user is logged in (Session OR Google)
     const currentUser = req.session.user || req.user;
@@ -78,15 +66,13 @@ router.get('/dashboard', async (req, res) => {
 
     try {
         // Find bookings for this user
-        // We check both User ID and Email to catch all bookings
+        // We check both User ID and Email for matching bookings
         const bookings = await Booking.find({ 
             $or: [
                 { user: currentUser._id },
                 { email: currentUser.email }
             ]
-        }).sort({ date: 1 }); // Sort by closest date first
-
-        // Render the dashboard view with the user data and their bookings
+        }).sort({ date: 1 }); // Sort by date in ascending order
         res.render('user/dashboard', { user: currentUser, bookings });
 
     } catch (err) {
@@ -95,9 +81,7 @@ router.get('/dashboard', async (req, res) => {
     }
 });
 
-// ==========================================
-// 4. LOGOUT
-// ==========================================
+//logout
 router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) console.log(err);

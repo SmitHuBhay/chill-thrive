@@ -3,7 +3,7 @@ const Service = require('./models/Service');
 const Content = require('./models/Content');
 const Feedback = require('./models/Feedback');
 
-mongoose.connect('mongodb://127.0.0.1:27017/chillandthrive')
+mongoose.connect('mongodb://127.0.0.1:27017/gwoc-portal')
     .then(() => console.log('✅ Connected to MongoDB for Seeding'))
     .catch(err => console.error(err));
 
@@ -18,7 +18,7 @@ const seedDB = async () => {
     // 1. SERVICES
     const services = [
         {
-            title: "Cryotherapy Session",
+            title: "ICE BATH",
             category: "Recovery",
             price: 1500,
             duration: "3 mins",

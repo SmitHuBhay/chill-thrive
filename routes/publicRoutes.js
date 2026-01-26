@@ -12,7 +12,7 @@ router.get('/services', publicController.getServices);
 router.get('/book', publicController.getBooking);
 router.post('/book', publicController.postBooking);
 
-// 4. API for Availability (Used by the Booking Page script)
+// 4. API for Availability Check of dates
 router.get('/api/availability', publicController.checkAvailability);
 
 // 5. Founder Page

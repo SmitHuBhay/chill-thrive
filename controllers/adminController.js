@@ -2,9 +2,8 @@ const Service = require('../models/Service');
 const Content = require('../models/Content');
 const Booking = require('../models/Booking');
 const Feedback = require('../models/Feedback');
-const DaySettings = require('../models/DaySettings'); // Ensure casing matches filename!
+const DaySettings = require('../models/DaySettings'); 
 
-// 1. ADMIN LOGIN PAGE
 // 1. ADMIN LOGIN PAGE
 exports.getLogin = (req, res) => {
     // Check if the URL has ?error=true (from a failed login attempt)

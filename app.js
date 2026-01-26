@@ -1,10 +1,10 @@
-require('dotenv').config(); // MUST be line 1
+require('dotenv').config(); // environment variables
 const express = require('express'); // backend
 const connectDB = require('./config/db');
 const methodOverride = require('method-override'); // put and delete
 const session = require('express-session'); // cookies
 const expressLayouts = require('express-ejs-layouts'); 
-const passport = require('passport'); // <--- Added this
+const passport = require('passport'); // authentication
 const mongoose = require("mongoose")// Connect to Database
 mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/chillandthrive')
     .then(() => console.log('✅ Connected to MongoDB'))
@@ -18,7 +18,9 @@ app.set('layout', 'layout');
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); // <--- CRITICAL for the schedule to load
+app.use(express.json()); //json data from database
+
+// Method Override
 app.use(methodOverride('_method'));
 
 // Session
