@@ -47,3 +47,15 @@ npm install
 npm run seed
 # for running the website
 npm run dev
+
+### 3. Environment Configuration (.env)
+Create a file named `.env` in the root directory and populate it with your specific credentials:
+
+```env
+PORT=3007
+MONGO_URI=mongodb://127.0.0.1:27017/chillThrive
+SESSION_SECRET=your_random_secret_string_here
+GOOGLE_CLIENT_ID=your_google_client_id_here
+GOOGLE_CLIENT_SECRET=your_google_client_secret_here
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your_app_specific_password_here
