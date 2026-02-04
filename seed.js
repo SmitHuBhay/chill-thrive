@@ -1,9 +1,10 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 const Service = require('./models/Service');
 const Content = require('./models/Content');
 const Feedback = require('./models/Feedback');
 
-mongoose.connect('mongodb://127.0.0.1:27017/gwoc-portal')
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('✅ Connected to MongoDB for Seeding'))
     .catch(err => console.error(err));
 
